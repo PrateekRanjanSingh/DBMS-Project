@@ -7,30 +7,56 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Baloo+Bhaijaan|Roboto" rel="stylesheet">
+    <style type="text/css">
+        span{
+            font-weight: bold;
+            font-size: large;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
     <div class="jumbotron">
         <h2>Hello welcome!</h2><br>
-
-        <table class="table-bordered">
-            <thead>
-                <th>Name</th>
-                <th>Age</th>
-            </thead>
-            <tbody>
-                <% for(var i=0; i < data.length; i++) { %>
-                <tr>
-                    <td><%= data[i].consumer_Fname %></td>
-                    <td><%= data[i].age %></td>
-                </tr>
-                <% } %>
-            </tbody>
-        </table>
-
-
+        
+        <span>Name: </span> &nbsp; &nbsp; <span> <%= data[0].consumer_Fname %> </span> <br>
+        <span>Age: </span> &nbsp; &nbsp; <span> <%= data[0].age %> </span>
 
     </div>
+    <br><br>
+    <div class="row">
+        <div class="col-sm-6">
+            <button class="btn btn-primary bill">View Bill</button>
+        </div>
+        <div class="col-sm-6">
+            <p><span id="bill"></span></p>
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-sm-6">
+            <button class="btn btn-primary rates">View Rates</button>
+        </div>
+        <div class="col-sm-6">
+            <span id="rate"></span>
+        </div>
+    </div> <br>
+    <div class="row">
+        <div class="col-sm-6">
+            <button class="btn btn-primary meter">Meter Details</button>
+        </div>
+        <div class="col-sm-6">
+            <span id="meter"></span>
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-sm-6">
+            <button class="btn btn-primary reigon">View Reigon</button>
+        </div>
+        <div class="col-sm-6">
+            <span id="reigon"></span>
+        </div>
+    </div>
+
 
 </div>
 
@@ -39,5 +65,57 @@
 
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script>
+    var aadhar = <%= aadhar %>;
+        console.log(aadhar);
+    $(".bill").click(function(){
+        $.post("/getbill",
+            {
+                aadhar: aadhar
+            },
+            function(data, status){
+                document.getElementById('bill').innerHTML = data[0].UNIT + ' UNIT';
+            });
+    });
+    $(".rates").click(function(){
+        $.post("/getrates",
+            {
+                aadhar: aadhar
+            },
+            function(data, status){
+                var data = data[0];
+                console.log(data);
+                var totalcharge = data.BASE_Charge + data.additional_charges +
+                                    data.service_charge;
+                document.getElementById('rate').innerHTML = totalcharge + ' Rs.';
+            });
+    });
+    $(".meter").click(function(){
+        $.post("/getmeter",
+            {
+                aadhar: aadhar
+            },
+            function(data, status){
+                var data = data[0];
+                console.log(data);
+
+                document.getElementById('meter').innerHTML = 'meter type is: '+ data.TYPE+
+                                                            ' and sanctionloaded is ' + data.SANCTIONED_LOAD;
+            });
+    });
+    $(".reigon").click(function(){
+        $.post("/getreigon",
+            {
+                aadhar: aadhar
+            },
+            function(data, status){
+                var data = data[0];
+                console.log(data);
+
+                document.getElementById('reigon').innerHTML = 'reigon is: '+ data.REGION_NAME;
+            });
+    });
+
+</script>
 </body>
 </html>
