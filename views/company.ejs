@@ -14,13 +14,58 @@
         <h2>Hello welcome!</h2><br>
         <div class="row">
             <div class="col-sm-6">
-                <form method="post" action="/company">
+                <form>
                     <div class="form-group">
                         <label for="id">Company Id:</label>
                         <input type="text" class="form-control" name="comp_id" id="id">
                     </div>
-                    <input type="submit" class="btn btn-default" value="submit">
+                    <button class="btn btn-default getd">Submit </button>
                 </form>
+            </div>
+        </div>
+    </div><br><br>
+    <div class="section1">
+        <table class="table sec1table" style="display: none;">
+            <thead>
+                <th>Company Name</th>
+                <th>Address</th>
+            </thead>
+            <tbody id="comp_details">
+                <td id="name"></td>
+                <td id="addr"></td>
+            </tbody>
+        </table>
+    </div>
+    <div class="section2" style="display: none;">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <button class="btn btn-primary vconsum">View consumers</button>
+                <table class="table vconsumtable" style="display: none;">
+                    <thead>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Aadhar no.</th>
+                    <th>Age</th>
+                    </thead>
+                    <tbody id="reigonn">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <button class="btn btn-primary vbranch">View branches</button>
+
+                <table class="table branchtable" style="display: none;">
+                    <thead>
+                        <th>Branch Name</th>
+                        <th>Address</th>
+                        <th>Branch Number</th>
+
+                    </thead>
+                    <tbody id="branches">
+
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -32,5 +77,72 @@
 
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    var section1 = $('.section1');
+    var section2 = $('.section2');
+    var comp_id = $('#id').val();
+
+    $('.getd').click(function (e) {
+        var comp_id = $('#id').val();
+       e.preventDefault();
+       section2.fadeOut();
+       $.post("/getcomp",
+           {
+               comp_id : comp_id
+           },
+            function (data, status) {
+                $('.sec1table').fadeIn();
+                var data = data[0];
+                $('#name').html('<a href="#" class="hidethis" id="'+data.COMPANY_ID+'">'+ data.NAME+'</a>');
+                $('#addr').html(data.ADDRESS);
+            })
+    });
+
+    $('#name').click(function (e) {
+        e.preventDefault();
+        section1.hide();
+        section2.show();
+    })
+
+    $('.vconsum').click(function (e) {
+        var comp_id = $('#id').val();
+
+        $.post("/vcustom",
+            {
+                comp_id : comp_id
+            },
+            function (data, status) {
+                $('.vconsumtable').fadeIn();
+                for(var i=0;i<data.length;i++)
+                {
+                    var row1 = '<tr>' +
+                        '<td>' + data[i].Consumer_Fname + '</td>'+
+                        '<td>' + data[i].Address + '</td>'+
+                        '<td>' + data[i].Aadhar_Number + '</td>'+
+                        '<td>' + data[i].Age + '</td></tr>';
+                    $('#reigonn').html(row1);
+                }
+
+            });
+    });
+    $('.vbranch').click(function (e) {
+        var comp_id = $('#id').val();
+        $.post("/vbranch",
+            {
+                comp_id : comp_id
+            },
+            function (data, status) {
+                $('.branchtable').fadeIn();
+                for(var i=0;i<data.length;i++)
+                {
+                    var row1 = '<tr>' +
+                        '<td>' + data[i].NAME + '</td>'+
+                        '<td>' + data[i].ADDRESS + '</td>'+
+                        '<td>' + data[i].BRANCH_NUM + '</td></tr>'
+                    $('#branches').html(row1);
+                }
+            })
+    });
+</script>
 </body>
 </html>

@@ -14,15 +14,31 @@
         <h2>Hello welcome!</h2><br>
         <div class="row">
             <div class="col-sm-6">
-                <form method="post" action="/customer">
+                <form>
                     <div class="form-group">
                         <label for="reg_id">Reigon Id:</label>
-                        <input type="text" class="form-control" name="reg_id" id="reg_id">
+                        <input type="text" class="form-control" name="reg_id" id="reg_id" required>
                     </div>
-                    <input type="submit" class="btn btn-default" value="submit">
+                    <button class="btn btn-default reg">Submit</button>
                 </form>
             </div>
         </div>
+    </div>
+
+    <br>
+    <br>
+    <div class="section">
+        <table class="table reg_custom" style="display: none;">
+            <thead>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Aadhar no.</th>
+                <th>Age</th>
+            </thead>
+            <tbody id="reigonn">
+
+            </tbody>
+        </table>
     </div>
 
 </div>
@@ -32,5 +48,28 @@
 
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(".reg").click(function(e){
+        e.preventDefault();
+        var reg_id = $('#reg_id').val();
+        console.log(reg_id);
+        $.post("/reg_id",
+            {
+                reg_id : reg_id
+            },
+            function(data, status){
+                $('.reg_custom').fadeIn();
+                for(var i=0;i<data.length;i++)
+                {
+                    var row1 = '<tr>' +
+                        '<td>' + data[i].Consumer_Fname + '</td>'+
+                        '<td>' + data[i].Address + '</td>'+
+                        '<td>' + data[i].Aadhar_Number + '</td>'+
+                        '<td>' + data[i].Age + '</td></tr>';
+                    $('#reigonn').append(row1);
+                }
+            });
+    });
+</script>
 </body>
 </html>
