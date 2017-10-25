@@ -6,3 +6,23 @@ h1{
     text-align: center;
     color: #254994;
 }
+body {
+  background: #80DEEA;
+  background: -moz-linear-gradient(-45deg, #80DEEA 0%, #283593 100%);
+  background: -webkit-linear-gradient(-45deg, #80DEEA 0%, #283593 100%);
+  font-family: 'Open Sans', sans-serif;
+}
+
+.link_holder{
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #0a0a0a;
+    color: white;
+}
+.link_holder a{
+    font-size: 20px;
+}
+.cds{
+    color: white
+
+}
