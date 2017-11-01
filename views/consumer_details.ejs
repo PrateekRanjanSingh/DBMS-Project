@@ -12,6 +12,9 @@
             font-weight: bold;
             font-size: large;
         }
+        table thead th,table tbody td{
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -26,35 +29,110 @@
     <br><br>
 <div class="custo_details" style="background-color: #0a0a0a;padding: 20px;border-radius: 20px;">
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-3">
             <button class="btn btn-primary bill">View Bill</button>
         </div>
-        <div class="col-sm-6">
-            <p><span class="cds" id="bill"></span></p>
+        <div class="col-sm-9">
+            <!--<p><span class="cds" id="bill"></span></p>-->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Bill ID</th>
+                        <th>UNIT</th>
+                        <th>Month</th>
+                        <th>Non_Paid</th>
+                        <th>Paid</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="bill"></td>
+                        <td id="unit"></td>
+                        <td id="month"></td>
+                        <td id="non_paid"></td>
+                        <td id="paid"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div><br>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-3">
             <button class="btn btn-primary rates">View Rates</button>
         </div>
-        <div class="col-sm-6">
-            <span class="cds" id="rate"></span>
+        <div class="col-sm-9">
+            <!--<span class="cds" id="rate"></span>-->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>BILL_ID</th>
+                    <th>BASE_Charge</th>
+                    <th>additional_charges</th>
+                    <th>service_charge</th>
+                    <th>cust_aadhar_number</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td id="bill2"></td>
+                    <td id="base_c"></td>
+                    <td id="additional_c"></td>
+                    <td id="service_c"></td>
+                    <td id="aadhar"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div> <br>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-3">
             <button class="btn btn-primary meter">Meter Details</button>
         </div>
-        <div class="col-sm-6">
-            <span class="cds" id="meter"></span>
+        <div class="col-sm-9">
+            <!--<span class="cds" id="meter"></span>-->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Meter Number</th>
+                    <th>Sanctioned Load</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td id="metertype"></td>
+                    <td id="meterno"></td>
+                    <td id="sanctioned"></td>
+
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div><br>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-3">
             <button class="btn btn-primary reigon">View Reigon</button>
         </div>
-        <div class="col-sm-6">
-            <span class="cds" id="reigon"></span>
+        <div class="col-sm-9">
+            <!--<span class="cds" id="reigon"></span>-->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Region_ID</th>
+                    <th>Region_Name</th>
+                    <th>Postal Code</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td id="regionid"></td>
+                    <td id="regionname"></td>
+                    <td id="postalcode"></td>
+
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -75,7 +153,11 @@
                 aadhar: aadhar
             },
             function(data, status){
-                document.getElementById('bill').innerHTML = data[0].UNIT + ' UNIT';
+                document.getElementById('bill').innerHTML = data[0].BILL_ID;
+                document.getElementById('unit').innerHTML = data[0].UNIT + ' UNIT';
+                document.getElementById('month').innerHTML = data[0].MONTH ;
+                document.getElementById('non_paid').innerHTML = data[0].NON_PAID ;
+                document.getElementById('paid').innerHTML = data[0].PAID ;
             });
     });
     $(".rates").click(function(){
@@ -88,7 +170,11 @@
                 console.log(data);
                 var totalcharge = data.BASE_Charge + data.additional_charges +
                                     data.service_charge;
-                document.getElementById('rate').innerHTML = totalcharge + ' Rs.';
+                document.getElementById('bill2').innerHTML = data.BILL_ID;
+                document.getElementById('base_c').innerHTML = data.BASE_Charge+ ' Rs.';
+                document.getElementById('additional_c').innerHTML = data.additional_charges+ ' Rs.';
+                document.getElementById('service_c').innerHTML = data.service_charge+ ' Rs.';
+                document.getElementById('aadhar').innerHTML = data.cust_aadhar_number;
             });
     });
     $(".meter").click(function(){
@@ -100,8 +186,10 @@
                 var data = data[0];
                 console.log(data);
 
-                document.getElementById('meter').innerHTML = 'meter type is: '+ data.TYPE+
-                                                            ' and sanctionloaded is ' + data.SANCTIONED_LOAD;
+                document.getElementById('metertype').innerHTML = data.TYPE;
+                document.getElementById('meterno').innerHTML  = data.METER_NUMBER;
+                document.getElementById('sanctioned').innerHTML =data.SANCTIONED_LOAD;
+
             });
     });
     $(".reigon").click(function(){
@@ -112,8 +200,9 @@
             function(data, status){
                 var data = data[0];
                 console.log(data);
-
-                document.getElementById('reigon').innerHTML = 'reigon is: '+ data.REGION_NAME;
+                document.getElementById('regionid').innerHTML = data.REGION_ID;
+                document.getElementById('regionname').innerHTML =  data.REGION_NAME;
+                document.getElementById('postalcode').innerHTML =data.POSTAL_CODE;
             });
     });
 
